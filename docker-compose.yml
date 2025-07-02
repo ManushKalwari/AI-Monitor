@@ -1,0 +1,51 @@
+
+
+
+services:
+  
+  app:
+    build: .  # build fr dockerfile in current folder
+    ports: 
+      - '8000:8000' # map container and host port
+    depends_on:
+      - postgres # wait for db to start
+    environment:
+      - DATABASE_URL=postgresql://aiuser:aipass@postgres/aidb
+    volumes:
+      - .:/app
+    command: uvicorn main:app --host 0.0.0.0 --port 8000 --reload
+
+  
+  postgres:
+    image: postgres:14
+    container_name: ai_monitor-postgres 
+    environment:
+      POSTGRES_USER: aiuser
+      POSTGRES_PASSWORD: aipass
+      POSTGRES_DB: aidb
+    ports:
+      - '5432:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    ports:
+      - '9090:9090'
+
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - '3000:3000'
+    volumes: 
+      - grafana_data:/var/lib/grafana
+
+volumes:
+  postgres_data:
+  grafana_data:

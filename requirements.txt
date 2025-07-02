@@ -1,0 +1,19 @@
+# Core ML + TorchVision
+torch
+torchvision
+
+# FastAPI server
+fastapi
+uvicorn[standard]
+
+# Image handling
+pillow
+
+# Database
+sqlalchemy
+psycopg2-binary
+
+# For image upload forms in FastAPI
+python-multipart
+
+prometheus_client
